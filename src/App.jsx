@@ -17,9 +17,13 @@ function App() {
     formData.append("image", imageFile);
 
     try {
-      await axios.post("http://localhost:3001/api/segment", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await axios.post(
+        `${import.meta.env.VITE_BACK_URL}/api/segment`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       setPrompt("");
       setImageFile(null);
       pollForImage();
@@ -35,7 +39,9 @@ function App() {
 
     for (let i = 0; i < maxRetries; i++) {
       try {
-        const res = await axios.get("http://localhost:3001/api/latest-image");
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACK_URL}/api/latest-image`
+        );
         if (res.data.status === "ready") {
           setImageSrc(res.data.image);
           setStatus("✅ ¡Imagen segmentada lista!");
