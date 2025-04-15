@@ -34,7 +34,7 @@ function App() {
   };
 
   const pollForImage = async () => {
-    const maxRetries = 120;
+    const maxRetries = 60;
     const interval = 1000;
 
     for (let i = 0; i < maxRetries; i++) {
