@@ -9,7 +9,7 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("Segmentando imagen...");
+    setStatus("⏳ Segmentando imagen...");
     setImageSrc(null);
 
     const formData = new FormData();
@@ -21,10 +21,10 @@ function App() {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setPrompt("");
-      pollForImage();
       setImageFile(null);
+      pollForImage();
     } catch (err) {
-      setStatus("Error al segmentar.");
+      setStatus("❌ Error al segmentar.");
       console.error(err);
     }
   };
@@ -38,7 +38,7 @@ function App() {
         const res = await axios.get("http://localhost:3001/api/latest-image");
         if (res.data.status === "ready") {
           setImageSrc(res.data.image);
-          setStatus("¡Imagen segmentada lista!");
+          setStatus("✅ ¡Imagen segmentada lista!");
           return;
         }
       } catch (err) {
@@ -47,50 +47,72 @@ function App() {
       await new Promise((resolve) => setTimeout(resolve, interval));
     }
 
-    setStatus("Timeout: imagen no disponible.");
+    setStatus("⛔ Timeout: imagen no disponible.");
+  };
+
+  const handleDownload = () => {
+    if (!imageSrc) return;
+    const link = document.createElement("a");
+    link.href = imageSrc;
+    link.download = "imagen_segmentada.png";
+    link.click();
   };
 
   return (
-    <div className="bg-gray-400 p-6 text-center h-screen flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold text-purple-600 mb-4">
-        Segmentador de Prendas
-      </h1>
+    <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
+      <h1 className="text-4xl font-bold text-purple-600 mb-6">Segmentador</h1>
 
       <form
         onSubmit={handleSubmit}
-        className="mb-4 flex flex-col items-center gap-2"
+        className="mb-6 flex flex-col items-center gap-4"
       >
         <input
           type="text"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="Prompt (ej: jean, sweater...)"
-          className="border border-gray-300 px-3 py-2 rounded w-96"
+          className="border border-gray-300 px-4 py-2 rounded w-80"
           required
         />
         <input
           type="file"
           accept="image/*"
           onChange={(e) => setImageFile(e.target.files[0])}
-          className="border border-gray-300 px-3 py-2 rounded w-96"
+          className="border border-gray-300 px-4 py-2 rounded w-80"
           required
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
         >
           Segmentar
         </button>
       </form>
 
-      <p className="mb-4">{status}</p>
+      <p
+        className={`mb-4 font-semibold ${
+          status.includes("Error") || status.includes("Timeout")
+            ? "text-red-600"
+            : "text-green-600"
+        }`}
+      >
+        {status}
+      </p>
 
       {imageSrc && (
-        <img
-          src={imageSrc}
-          alt="Resultado"
-          className="mx-auto border rounded max-h-full bg-amber-50"
-        />
+        <div className="flex flex-col items-center gap-4">
+          <img
+            src={imageSrc}
+            alt="Resultado"
+            className="max-w-[600px] max-h-[500px] border shadow-md rounded"
+          />
+          <button
+            onClick={handleDownload}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+          >
+            Descargar Imagen
+          </button>
+        </div>
       )}
     </div>
   );
