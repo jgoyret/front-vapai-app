@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function App() {
   const [prompt, setPrompt] = useState("");
@@ -89,7 +90,7 @@ function App() {
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition hover:cursor-pointer"
         >
           Segmentar
         </button>
@@ -104,6 +105,11 @@ function App() {
       >
         {status}
       </p>
+      {status.includes("Segmentando") && (
+        <div className="flex items-center gap-2 mb-4 text-blue-600 font-semibold">
+          <ClipLoader size={24} color="#2563eb" />
+        </div>
+      )}
 
       {imageSrc && (
         <div className="flex flex-col items-center gap-4">
@@ -114,7 +120,7 @@ function App() {
           />
           <button
             onClick={handleDownload}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition hover:cursor-pointer"
           >
             Descargar Imagen
           </button>
