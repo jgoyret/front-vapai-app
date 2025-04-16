@@ -66,8 +66,13 @@ function App() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
-      <h1 className="text-4xl font-bold text-purple-600 mb-6">Segmentador</h1>
+    <div
+      className=" min-h-screen flex flex-col items-center justify-center p-6"
+      style={{
+        background: "linear-gradient(to top, #b8d8c6, #e6f4ec)",
+      }}
+    >
+      <h1 className="text-4xl font-bold text-gray-950 mb-6">SEGMENTADOR</h1>
 
       <form
         onSubmit={handleSubmit}
@@ -85,12 +90,12 @@ function App() {
           type="file"
           accept="image/*"
           onChange={(e) => setImageFile(e.target.files[0])}
-          className="border border-gray-300 px-4 py-2 rounded w-80"
+          className="border border-gray-300 px-4 py-2 rounded w-80 hover:border-gray-900 hover:cursor-pointer"
           required
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition hover:cursor-pointer"
+          className="bg-gray-950 text-white px-6 py-2 rounded hover:bg-gray-600 transition hover:cursor-pointer"
         >
           Segmentar
         </button>
